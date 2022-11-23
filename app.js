@@ -12,28 +12,28 @@ const app = express()
 app.set("view engine", "ejs");
 
 // middleware
-app.use(express.urlencoded({extended: true}));
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cookieParser());
 
 //connect to database
-const dbURL  = "mongodb://127.0.0.1/student-result"
+const dbURL = "mongodb://127.0.0.1/student-result"
 mongoose.connect(dbURL)
-.then(result => {
-  console.log("connected to database");
+  .then(result => {
+    console.log("connected to database");
 
-  //listen for request
-  app.listen(3000, () =>{
-    console.log('server listening on port 3000');
-  });
-}).catch(err => {
-  console.log(err);
-})
+    //listen for request
+    app.listen(3000, () => {
+      console.log('server listening on port 3000');
+    });
+  }).catch(err => {
+    console.log(err);
+  })
 
 // create routes
 app.get('*', checkStudent)
 
-app.get('/', (req, res) =>{
+app.get('/', (req, res) => {
   res.render("index")
 });
 
@@ -42,3 +42,7 @@ app.use(studentroutes);
 app.use(courseroutes);
 
 app.use(courseRegisterRoutes);
+
+app.use((req, res) => {
+  res.status(404).render('404')
+})
